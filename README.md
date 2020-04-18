@@ -1,5 +1,7 @@
 # NotebookApp
-C# elective course work №1
+C# elective course by First Line Software
+
+Work №1
 
 NotebookApp is a console application, which performs as a phone book, providing opportunities such as
 

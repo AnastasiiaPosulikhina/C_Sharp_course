@@ -310,7 +310,7 @@ namespace NotebookApp
             return desiredNote;
         }
 
-        public static bool isCorrectChoiceCheck(string choice, out ushort choiceCheck)//проверка на то, является ли введенный с клавиатуры символ, число
+        public static bool isCorrectChoiceCheck(string choice, out ushort choiceCheck)//проверка того, является ли введенный с клавиатуры символ, числом
         {
             bool isCorrect = ushort.TryParse(choice, out choiceCheck);
             return isCorrect;

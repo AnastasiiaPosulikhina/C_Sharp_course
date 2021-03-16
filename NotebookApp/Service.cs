@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NotebookApp
 {
-    public class Service
+    public class Service 
     {
-
-        internal static void Menu()//меню программы
+        internal static void Menu() //меню программы
         {
             Console.WriteLine("Добро пожаловать в электронную записную телефонную книжку Notebook.Pro 1.0!");
             Console.WriteLine("\nВыберите дальнейшее действие:\n");
@@ -21,7 +17,7 @@ namespace NotebookApp
             Console.WriteLine("\n0 - Выйти из системы.");
         }
 
-        internal static void EditNoteMenu(Note note)//меню редактирования ранее созданных записей
+        internal static void EditNoteMenu(Note note) //меню редактирования ранее созданных записей
         {
             Console.Clear();
             Console.WriteLine("***Редактирование ранее созданных записей***");
@@ -38,7 +34,7 @@ namespace NotebookApp
             Console.WriteLine("9 - Прочие заметки.");
         }
 
-        internal static void Choice(Notebook noteBook)//выбор пункта основного меню
+        internal static void Choice(Notebook noteBook) //выбор пункта основного меню
         {
             byte choice;
             Console.Write("\nЯ хочу ");
@@ -63,31 +59,37 @@ namespace NotebookApp
                     case 3:
                         Console.Clear();
                         Console.WriteLine("***Редактирование ранее созданных записей***\n");
-                        
+
                         if (noteBook.listOfNotes.Count == 0)
                         {
-                            Console.WriteLine("Записи не найдены!\nНажмите любую клавишу, чтобы вернуться в главное меню.");
-                            toMainMenu(noteBook);
+                            Console.WriteLine(
+                                "Записи не найдены!\nНажмите любую клавишу, чтобы вернуться в главное меню.");
+                            ToMainMenu(noteBook);
                             break;
                         }
-                        
+
                         Console.WriteLine("Список записей: ");
-                        for (int i = 0; i < noteBook.listOfNotes.Count; i++)
+                        for (var i = 0; i < noteBook.listOfNotes.Count; i++)
                         {
-                            Note note = noteBook.listOfNotes[i];
-                            Console.WriteLine(" {0}. {1} {2}, {3} ({4} - идентификационный номер записи);", i + 1, note.surname, note.name, note.phoneNumber, note.notesNumber);
+                            var note = noteBook.listOfNotes[i];
+                            Console.WriteLine(" {0}. {1} {2}, {3} ({4} - идентификационный номер записи);", i + 1,
+                                note.surname, note.name, note.phoneNumber, note.notesNumber);
                         }
-                        Console.Write("\nВведите идентификационный номер записи, которую вы желаете изменить, или 0, чтобы вернуться в главное меню: ");
-                        Note desiredNote = noteBook.GetNote();
+
+                        Console.Write(
+                            "\nВведите идентификационный номер записи, которую вы желаете изменить, или 0, чтобы вернуться в главное меню: ");
+                        var desiredNote = noteBook.GetNote();
                         if (desiredNote == null)
                         {
-                            Console.WriteLine("\nЗапись с данным номером не найдена.\nНажмите любую клавишу, чтобы вернуться в главное меню.");
-                            toMainMenu(noteBook);
+                            Console.WriteLine(
+                                "\nЗапись с данным номером не найдена.\nНажмите любую клавишу, чтобы вернуться в главное меню.");
+                            ToMainMenu(noteBook);
                         }
                         else
                         {
                             noteBook.EditNote(desiredNote);
                         }
+
                         break;
 
                     case 4:
@@ -97,8 +99,9 @@ namespace NotebookApp
                         if (noteBook.listOfNotes.Count != 0)
                         {
                             Console.WriteLine("\nНажмите любую клавишу, чтобы вернуться в главное меню.");
-                            toMainMenu(noteBook);
+                            ToMainMenu(noteBook);
                         }
+
                         break;
 
                     case 5:
@@ -127,7 +130,8 @@ namespace NotebookApp
             }
         }
 
-        internal static Note EditNoteChoice(ref Note note, Notebook noteBook)//выбор пункта меню редактирования ранее созданных записей
+        internal static Note
+            EditNoteChoice(ref Note note, Notebook noteBook) //выбор пункта меню редактирования ранее созданных записей
         {
             byte choice;
             Console.Write("\nЯ хочу изменить поле ");
@@ -140,76 +144,80 @@ namespace NotebookApp
                 {
                     case 1:
                         Console.Write("\nИзмените фамилию: ");
-                        string surname = Console.ReadLine();
-                        surname = checkNameString(surname, new char[] { '-' });
+                        var surname = Console.ReadLine();
+                        surname = CheckNameString(surname, new[] {'-'});
                         note.surname = surname;
                         break;
 
                     case 2:
                         Console.Write("\nИзмените имя: ");
-                        string name = Console.ReadLine();
-                        name = checkNameString(name, new char[] { '-' });
+                        var name = Console.ReadLine();
+                        name = CheckNameString(name, new[] {'-'});
                         note.name = name;
                         break;
 
                     case 3:
                         Console.Write("\nИзмените отчество: ");
-                        string patronymic = Console.ReadLine();
-                        patronymic = checkNameString(patronymic, new char[] { });
+                        var patronymic = Console.ReadLine();
+                        patronymic = CheckNameString(patronymic, new char[] { });
                         note.patronymic = patronymic;
                         break;
 
                     case 4:
                         Console.Write("\nИзмените номер телефона: ");
-                        string phoneNumber = Console.ReadLine();
+                        var phoneNumber = Console.ReadLine();
                         long phoneNumberCheck;
                         while (long.TryParse(phoneNumber, out phoneNumberCheck) != true)
                         {
                             Console.Write("\nВведённый Вами символ некорректен!\nПопробуйте ещё раз: ");
                             phoneNumber = Console.ReadLine();
                         }
+
                         note.phoneNumber = phoneNumber;
                         break;
 
                     case 5:
                         Console.Write("\nИзмените название страны: ");
-                        string country = Console.ReadLine();
-                        country = checkNameString(country, new char[] { '-', ' ' });
+                        var country = Console.ReadLine();
+                        country = CheckNameString(country, new[] {'-', ' '});
                         note.country = country;
                         break;
 
                     case 6:
                         Console.Write("\nИзмените дату рождения:  (ДД.MM.ГГГГ): ");
-                        string birthDateString = Console.ReadLine();
+                        var birthDateString = Console.ReadLine();
                         while (true)
-                        {
-                                if (birthDateString.Any(c => (!char.IsDigit(c) && (c != '.'))) || birthDateString[2] != '.' || birthDateString[5] != '.' || birthDateString.Length != 10)
-                                {
-                                    Console.Write("Введённые Вами данные недопустимы!\nПопробуйте ещё раз: ");
-                                    birthDateString = Console.ReadLine();
-                                }
-                                else
-                                    break;
-                        }
-                        DateTime birthDate = DateTime.ParseExact(birthDateString, "dd.MM.yyyy", null);
+                            if (birthDateString.Any(c => !char.IsDigit(c) && c != '.') || birthDateString[2] != '.' ||
+                                birthDateString[5] != '.' || birthDateString.Length != 10)
+                            {
+                                Console.Write("Введённые Вами данные недопустимы!\nПопробуйте ещё раз: ");
+                                birthDateString = Console.ReadLine();
+                            }
+                            else
+                            {
+                                break;
+                            }
+
+                        var birthDate = DateTime.ParseExact(birthDateString, "dd.MM.yyyy", null);
                         note.birthDate = birthDate;
                         break;
 
                     case 7:
                         Console.Write("\nИзмените название организации: ");
-                        string organization = Console.ReadLine(); ;
+                        var organization = Console.ReadLine();
+                        ;
                         note.organization = organization;
                         break;
 
                     case 8:
                         Console.Write("\nИзмените название должности: ");
-                        string position = Console.ReadLine();
+                        var position = Console.ReadLine();
                         note.position = position;
                         break;
 
                     case 9:
                         Console.Write("\nИзмените текст заметки: ");
-                        string notes = Console.ReadLine();
+                        var notes = Console.ReadLine();
                         note.notes = notes;
                         break;
 
@@ -232,44 +240,47 @@ namespace NotebookApp
                 Console.Write("\nВведённый Вами символ некорректен! \nПопробуйте ещё раз.\n");
                 Choice(noteBook);
             }
+
             return note;
         }
 
-        public static bool isIncorrectNameString(string s, char[] symbols)//проверка на правильность ввода строки 
-        {                                                                 //метод вынесен отдельно для того, чтобы было удобнее его протестировать
+        public static bool isIncorrectNameString(string s, char[] symbols) //проверка на правильность ввода строки 
+        {
+            //метод вынесен отдельно для того, чтобы было удобнее его протестировать
             if (s.Length == 0)
                 return true;
-            if (!Char.IsLetter(s[0]))
+            if (!char.IsLetter(s[0]))
                 return true;
             if (symbols.Any(c => s.Contains(c + "" + c)))
                 return true;
-            bool isIncorrect = s.Any(c => !Char.IsLetter(c) && !symbols.Contains(c));
+            var isIncorrect = s.Any(c => !char.IsLetter(c) && !symbols.Contains(c));
             return isIncorrect;
         }
 
-        internal static string checkNameString(string s, char[] symbols)//проверка на правильность ввода строки 
+        internal static string CheckNameString(string s, char[] symbols) //проверка на правильность ввода строки 
         {
             while (true)
-            {
                 if (isIncorrectNameString(s, symbols))
                 {
                     Console.Write("\nВведённая Вами строка содержит недопустимые символы!\nПопробуйте ещё раз: ");
                     s = Console.ReadLine();
                 }
                 else
+                {
                     break;
-            }
+                }
+
             return s;
         }
 
-        internal static void toMainMenu(Notebook noteBook)//вспомогательный метод, выводящий меню в консоль
+        internal static void ToMainMenu(Notebook noteBook) //вспомогательный метод, выводящий меню в консоль
         {
             Console.ReadKey();
             Console.Clear();
             Menu();
             Choice(noteBook);
             Console.ReadKey();
+            Console.WriteLine("edit");
         }
     }
 }
- 

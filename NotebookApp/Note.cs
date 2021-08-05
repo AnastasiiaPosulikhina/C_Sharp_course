@@ -22,7 +22,7 @@ namespace NotebookApp
             this.notes = notes;
             this.notesNumber = notesNumber;
         }
-
+        
         public Note(string surname, string name, string phoneNumber, string country, ushort notesNumber)
         {
             this.surname = surname;

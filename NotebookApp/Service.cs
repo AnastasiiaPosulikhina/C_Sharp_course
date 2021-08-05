@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace NotebookApp
+﻿namespace NotebookApp
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+
     public class Service
     {
 
@@ -40,12 +40,11 @@ namespace NotebookApp
 
         internal static void Choice(Notebook noteBook)//выбор пункта основного меню
         {
-            byte choice;
             Console.Write("\nЯ хочу ");
 
             try
             {
-                choice = byte.Parse(Console.ReadLine());
+                var choice = byte.Parse(Console.ReadLine() ?? throw new InvalidOperationException());
 
                 switch (choice)
                 {
@@ -63,14 +62,14 @@ namespace NotebookApp
                     case 3:
                         Console.Clear();
                         Console.WriteLine("***Редактирование ранее созданных записей***\n");
-                        
+
                         if (noteBook.listOfNotes.Count == 0)
                         {
                             Console.WriteLine("Записи не найдены!\nНажмите любую клавишу, чтобы вернуться в главное меню.");
                             toMainMenu(noteBook);
                             break;
                         }
-                        
+
                         Console.WriteLine("Список записей: ");
                         for (int i = 0; i < noteBook.listOfNotes.Count; i++)
                         {
@@ -99,6 +98,7 @@ namespace NotebookApp
                             Console.WriteLine("\nНажмите любую клавишу, чтобы вернуться в главное меню.");
                             toMainMenu(noteBook);
                         }
+
                         break;
 
                     case 5:
@@ -119,7 +119,6 @@ namespace NotebookApp
                         break;
                 }
             }
-
             catch (Exception e)
             {
                 Console.Write("\nВведённый Вами символ некорректен! \nПопробуйте ещё раз.\n");
@@ -134,28 +133,28 @@ namespace NotebookApp
 
             try
             {
-                choice = byte.Parse(Console.ReadLine());
+                choice = byte.Parse(Console.ReadLine() ?? string.Empty);
 
                 switch (choice)
                 {
                     case 1:
                         Console.Write("\nИзмените фамилию: ");
                         string surname = Console.ReadLine();
-                        surname = checkNameString(surname, new char[] { '-' });
+                        surname = CheckNameString(surname, new char[] { '-' });
                         note.surname = surname;
                         break;
 
                     case 2:
                         Console.Write("\nИзмените имя: ");
                         string name = Console.ReadLine();
-                        name = checkNameString(name, new char[] { '-' });
+                        name = CheckNameString(name, new char[] { '-' });
                         note.name = name;
                         break;
 
                     case 3:
                         Console.Write("\nИзмените отчество: ");
                         string patronymic = Console.ReadLine();
-                        patronymic = checkNameString(patronymic, new char[] { });
+                        patronymic = CheckNameString(patronymic, new char[] { });
                         note.patronymic = patronymic;
                         break;
 
@@ -174,7 +173,7 @@ namespace NotebookApp
                     case 5:
                         Console.Write("\nИзмените название страны: ");
                         string country = Console.ReadLine();
-                        country = checkNameString(country, new char[] { '-', ' ' });
+                        country = CheckNameString(country, new char[] { '-', ' ' });
                         note.country = country;
                         break;
 
@@ -183,21 +182,24 @@ namespace NotebookApp
                         string birthDateString = Console.ReadLine();
                         while (true)
                         {
-                                if (birthDateString.Any(c => (!char.IsDigit(c) && (c != '.'))) || birthDateString[2] != '.' || birthDateString[5] != '.' || birthDateString.Length != 10)
+                                if (birthDateString != null && (birthDateString.Any(c => (!char.IsDigit(c) && (c != '.'))) || birthDateString[2] != '.' || birthDateString[5] != '.' || birthDateString.Length != 10))
                                 {
                                     Console.Write("Введённые Вами данные недопустимы!\nПопробуйте ещё раз: ");
                                     birthDateString = Console.ReadLine();
                                 }
                                 else
+                                {
                                     break;
+                                }
                         }
+
                         DateTime birthDate = DateTime.ParseExact(birthDateString, "dd.MM.yyyy", null);
                         note.birthDate = birthDate;
                         break;
 
                     case 7:
                         Console.Write("\nИзмените название организации: ");
-                        string organization = Console.ReadLine(); ;
+                        string organization = Console.ReadLine();
                         note.organization = organization;
                         break;
 
@@ -226,43 +228,55 @@ namespace NotebookApp
                         break;
                 }
             }
-
             catch (FormatException e)
             {
                 Console.Write("\nВведённый Вами символ некорректен! \nПопробуйте ещё раз.\n");
                 Choice(noteBook);
             }
+
             return note;
         }
 
-        public static bool isIncorrectNameString(string s, char[] symbols)//проверка на правильность ввода строки 
-        {                                                                 //метод вынесен отдельно для того, чтобы было удобнее его протестировать
+        private static bool IsIncorrectNameString(string s, char[] symbols)// проверка на правильность ввода строки 
+        { // метод вынесен отдельно для того, чтобы было удобнее его протестировать
             if (s.Length == 0)
+            {
                 return true;
+            }
+
             if (!Char.IsLetter(s[0]))
+            {
                 return true;
+            }
+
             if (symbols.Any(c => s.Contains(c + "" + c)))
+            {
                 return true;
-            bool isIncorrect = s.Any(c => !Char.IsLetter(c) && !symbols.Contains(c));
+            }
+
+            bool isIncorrect = s.Any(c => !char.IsLetter(c) && !symbols.Contains(c));
             return isIncorrect;
         }
 
-        internal static string checkNameString(string s, char[] symbols)//проверка на правильность ввода строки 
+        internal static string CheckNameString(string s, char[] symbols) // проверка на правильность ввода строки 
         {
             while (true)
             {
-                if (isIncorrectNameString(s, symbols))
+                if (IsIncorrectNameString(s, symbols))
                 {
                     Console.Write("\nВведённая Вами строка содержит недопустимые символы!\nПопробуйте ещё раз: ");
                     s = Console.ReadLine();
                 }
                 else
+                {
                     break;
+                }
             }
+
             return s;
         }
 
-        internal static void toMainMenu(Notebook noteBook)//вспомогательный метод, выводящий меню в консоль
+        internal static void toMainMenu(Notebook noteBook) // вспомогательный метод, выводящий меню в консоль
         {
             Console.ReadKey();
             Console.Clear();

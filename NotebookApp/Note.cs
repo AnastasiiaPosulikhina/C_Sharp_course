@@ -19,6 +19,19 @@ namespace NotebookApp
         public string notes { get; set; }
         public ushort notesNumber { get; }
 
+        public string document;
+
+        public string post;
+
+        public string payment;
+
+        //public string visit;
+        
+        public static String Greet()
+        {
+            return "Hi!";
+        }
+
         public Note() { }
 
         public Note(string surname, string name, string patronymic, string phoneNumber, string country, DateTime birthDate, string organization, string position, string notes, ushort notesNumber)
@@ -50,15 +63,15 @@ namespace NotebookApp
         public override string ToString()
         {
             string s = String.Format("\nНомер записи: {0}\n" +
-                "Фамилия: {1}\n" +
-                "Имя: {2}\n" +
-                "Отчество: {3}\n" +
-                "Номер телефона: {4}\n" +
-                "Страна: {5}\n" +
-                "Дата рождения: {6}\n" +
-                "Организация: {7}\n" +
-                "Должность: {8}\n" +
-                "Прочие заметки: {9}\n", notesNumber, surname, name, patronymic, phoneNumber, country, birthDate.ToString("dd.MM.yyyy"), organization, position, notes);
+                                     "Фамилия: {1}\n" +
+                                     "Имя: {2}\n" +
+                                     "Отчество: {3}\n" +
+                                     "Номер телефона: {4}\n" +
+                                     "Страна: {5}\n" +
+                                     "Дата рождения: {6}\n" +
+                                     "Организация: {7}\n" +
+                                     "Должность: {8}\n" +
+                                     "Прочие заметки: {9}\n", notesNumber, surname, name, patronymic, phoneNumber, country, birthDate.ToString("dd.MM.yyyy"), organization, position, notes);
             return s;
         }
     }

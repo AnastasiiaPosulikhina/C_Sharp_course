@@ -7,7 +7,7 @@ namespace NotebookAppTest
     public class ServiceTest
     {
         [TestMethod]
-        public void CreateNewNoteTesting()
+        public void Test()
         {
             string surname = "Посулихина";
             string name = "Анастасия";
@@ -19,6 +19,8 @@ namespace NotebookAppTest
             string position = null;
             string notes = null;
             ushort notesNumber = 1;
+            
+            Console.WriteLine("hello world!");
 
             NotebookApp.Note note1 = new NotebookApp.Note(surname, name, patronymic, phoneNumber, country, birthDate, organization, position, notes, notesNumber);
 

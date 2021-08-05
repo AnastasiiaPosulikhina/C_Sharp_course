@@ -8,7 +8,29 @@ namespace NotebookApp
 {
     public class Notebook
     {
-        internal List<Note> listOfNotes = new List<Note>();
+
+        internal void ShowAllNotes() //просмотр всех записей
+        {
+            if (listOfNotes.Count != 0)
+            {
+                int i = 1;
+
+                foreach (Note note in listOfNotes)
+                {
+                    Console.WriteLine(" {0}. {1} {2}, {3} ({4} - идентификационный номер записи);", i, note.surname,
+                        note.name, note.phoneNumber, note.notesNumber);
+                    i++;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Записи не найдены!\nНажмите любую клавишу, чтобы вернуться в главное меню.");
+                Service.toMainMenu(this);
+            }
+
+        }
+
+
         public ushort notesNumber = 1;
 
         internal static void Main(string[] args)
@@ -19,16 +41,17 @@ namespace NotebookApp
             Console.ReadKey();
         }
 
-        internal List<Note> CreateNewNote()//создание новой записи
+        internal List<Note> CreateNewNote() //создание новой записи
         {
             Console.Write("Введите фамилию (поле является обязательным): ");
-            string surname = Service.checkNameString(Console.ReadLine(), new char[] { '-' });
+            string surname = Service.checkNameString(Console.ReadLine(), new char[] {'-'});
 
             Console.Write("Введите имя (поле является обязательным): ");
-            string name = Service.checkNameString(Console.ReadLine(), new char[] { '-' });
+            string name = Service.checkNameString(Console.ReadLine(), new char[] {'-'});
 
             Console.Write("Желаете ввести отчество? (д/н)  ");
             string patronymic = null;
+
             while (true)
             {
                 string answer = Console.ReadLine();
@@ -48,23 +71,30 @@ namespace NotebookApp
             }
 
             Console.Write("Введите номер телефона (поле является обязательным): ");
-            string phoneNumber = Console.ReadLine(); 
+            string phoneNumber = Console.ReadLine();
             long phoneNumberCheck;
-            while((long.TryParse(phoneNumber, out phoneNumberCheck) != true) || (phoneNumber[0] == '-'))
+
+            while ((long.TryParse(phoneNumber, out phoneNumberCheck) != true) || (phoneNumber[0] == '-'))
             {
                 Console.Write("\nВведённый Вами символ некорректен!\nПопробуйте ещё раз: ");
                 phoneNumber = Console.ReadLine();
             }
 
             Console.Write("Введите название страны (поле является обязательным): ");
-            string country = Service.checkNameString(Console.ReadLine(), new char[] { '-', ' ' });
+            string country = Service.checkNameString(Console.ReadLine(), new char[] {'-', ' '});
 
             Console.Write("Желаете ввести дату рождения? (д/н)  ");
             DateTime birthDate = new DateTime();
             string birthDateString;
+
             while (true)
             {
                 string answer = Console.ReadLine();
+                HashSet<int> hs = new HashSet<int>();
+                Console.WriteLine(hs);
+                Console.WriteLine(hs);
+                Console.WriteLine(hs);
+                Console.WriteLine(hs);
 
                 if (answer.ToLower().Equals("д"))
                 {
@@ -73,7 +103,8 @@ namespace NotebookApp
 
                     while (true)
                     {
-                        if (birthDateString.Any(c => (!char.IsDigit(c) && (c != '.'))) || birthDateString[2] != '.' || birthDateString[5] != '.' || birthDateString.Length != 10)
+                        if (birthDateString.Any(c => (!char.IsDigit(c) && (c != '.'))) || birthDateString[2] != '.' ||
+                            birthDateString[5] != '.' || birthDateString.Length != 10)
                         {
                             Console.Write("Введённые Вами данные недопустимы!\nПопробуйте ещё раз: ");
                             birthDateString = Console.ReadLine();
@@ -82,6 +113,7 @@ namespace NotebookApp
                         else
                             break;
                     }
+
                     birthDate = DateTime.ParseExact(birthDateString, "dd.MM.yyyy", null);
                     break;
                 }
@@ -95,6 +127,7 @@ namespace NotebookApp
 
             Console.Write("Желаете ввести название организации? (д/н)  ");
             string organization = null;
+
             while (true)
             {
                 string answer = Console.ReadLine();
@@ -115,6 +148,7 @@ namespace NotebookApp
 
             Console.Write("Желаете ввести название должности? (д/н)  ");
             string position = null;
+
             while (true)
             {
                 string answer = Console.ReadLine();
@@ -135,6 +169,7 @@ namespace NotebookApp
 
             Console.Write("Желаете внести дополнительные заметки? (д/н)  ");
             string notes = null;
+
             while (true)
             {
                 string answer = Console.ReadLine();
@@ -153,7 +188,14 @@ namespace NotebookApp
                     Console.Write("\nВведённый Вами символ некорректен!\nПопробуйте ещё раз: ");
             }
 
-            listOfNotes.Add(new Note(surname, name, patronymic, phoneNumber, country, birthDate, organization, position, notes, notesNumber));
+            listOfNotes.Add(new Note(surname, name, patronymic, phoneNumber, country, birthDate, organization, position,
+                notes, notesNumber));
+
+            listOfNotes.Add(new Note(surname, name, patronymic, phoneNumber, country, birthDate, organization, position,
+                notes, notesNumber));
+
+            listOfNotes.Add(new Note(surname, name, patronymic, phoneNumber, country, birthDate, organization, position,
+                notes, notesNumber));
             notesNumber++;
             Console.WriteLine("\nЗапись успешно добавлена!");
             Service.toMainMenu(this);
@@ -161,7 +203,7 @@ namespace NotebookApp
             return listOfNotes;
         }
 
-        internal void ReadNote()//просмотр ранее созданной записи
+        internal void ReadNote() //просмотр ранее созданной записи
         {
             Console.WriteLine("***Просмотр ранее созданных записей***\n");
 
@@ -169,8 +211,11 @@ namespace NotebookApp
             {
                 Console.WriteLine("Список записей: ");
                 ShowAllNotes();
-                Console.Write("\nВведите идентификационный номер записи, которую вы желаете просмотреть, или 0, чтобы вернуться в главное меню: ");
+
+                Console.Write(
+                    "\nВведите идентификационный номер записи, которую вы желаете просмотреть, или 0, чтобы вернуться в главное меню: ");
                 Note desiredNote = GetNote();
+
                 if (desiredNote == null)
                 {
                     Console.WriteLine("Запись с данным номером не найдена.");
@@ -195,7 +240,7 @@ namespace NotebookApp
             }
         }
 
-        internal List<Note> EditNote(Note desiredNote)//редактирование ранее созданной записи
+        internal List<Note> EditNote(Note desiredNote) //редактирование ранее созданной записи
         {
             if (desiredNote != null)
             {
@@ -226,30 +271,11 @@ namespace NotebookApp
                 Console.WriteLine("\nЗапись успешно изменена!\nНажмите любую клавишу, чтобы вернуться в главное меню.");
                 Service.toMainMenu(this);
             }
+
             return listOfNotes;
         }
 
-        internal void ShowAllNotes()//просмотр всех записей
-        {
-            if (listOfNotes.Count != 0)
-            {
-                int i = 1;
-
-                foreach (Note note in listOfNotes)
-                {
-                    Console.WriteLine(" {0}. {1} {2}, {3} ({4} - идентификационный номер записи);", i, note.surname, note.name, note.phoneNumber, note.notesNumber);
-                    i++;
-                }
-            }
-
-            else
-            {
-                Console.WriteLine("Записи не найдены!\nНажмите любую клавишу, чтобы вернуться в главное меню.");
-                Service.toMainMenu(this);
-            }
-        }
-
-        internal void DeleteNote()//удаленее записи
+        internal void DeleteNote() //удаленее записи
         {
 
             Console.WriteLine("***Удаление ранее созданных записей***\n");
@@ -258,7 +284,9 @@ namespace NotebookApp
             {
                 Console.WriteLine("Список записей: ");
                 ShowAllNotes();
-                Console.Write("\nВведите идентификационный номер записи, которую вы желаете удалить, или 0, чтобы вернуться в главное меню: ");
+
+                Console.Write(
+                    "\nВведите идентификационный номер записи, которую вы желаете удалить, или 0, чтобы вернуться в главное меню: ");
                 Note uselessNote = GetNote();
 
                 if (uselessNote != null)
@@ -285,7 +313,18 @@ namespace NotebookApp
             }
         }
 
-        internal Note GetNote()//получение определённой записи по идентификационному номеру
+        public static bool
+            isCorrectChoiceCheck(string choice,
+                out ushort choiceCheck) //проверка того, является ли введенный с клавиатуры символ, числом
+        {
+            bool isCorrect = ushort.TryParse(choice, out choiceCheck);
+            Console.WriteLine("hello world!");
+            return isCorrect;
+        }
+
+        internal List<Note> listOfNotes = new List<Note>();
+
+        internal Note GetNote() //получение определённой записи по идентификационному номеру
         {
             string choice = Console.ReadLine();
             ushort choiceCheck;
@@ -303,17 +342,12 @@ namespace NotebookApp
             {
                 Console.Clear();
                 Service.Menu();
-                Service.Choice(this); 
+                Service.Choice(this);
                 Console.ReadKey();
             }
 
             return desiredNote;
         }
 
-        public static bool isCorrectChoiceCheck(string choice, out ushort choiceCheck)//проверка того, является ли введенный с клавиатуры символ, числом
-        {
-            bool isCorrect = ushort.TryParse(choice, out choiceCheck);
-            return isCorrect;
-        }
     }
 }

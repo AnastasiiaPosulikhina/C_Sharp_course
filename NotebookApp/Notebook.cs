@@ -1,41 +1,40 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NotebookApp
 {
     public class Notebook
     {
+        internal List<Note> listOfNotes = new List<Note>();
+
+
+        public ushort notesNumber = 1;
 
         internal void ShowAllNotes() //просмотр всех записей
         {
             if (listOfNotes.Count != 0)
             {
-                int i = 1;
+                var i = 1;
 
-                foreach (Note note in listOfNotes)
+                foreach (var note in listOfNotes)
                 {
                     Console.WriteLine(" {0}. {1} {2}, {3} ({4} - идентификационный номер записи);", i, note.surname,
                         note.name, note.phoneNumber, note.notesNumber);
                     i++;
                 }
             }
+
             else
             {
                 Console.WriteLine("Записи не найдены!\nНажмите любую клавишу, чтобы вернуться в главное меню.");
-                Service.toMainMenu(this);
+                Service.ToMainMenu(this);
             }
-
         }
-
-
-        public ushort notesNumber = 1;
 
         internal static void Main(string[] args)
         {
-            Notebook noteBook = new Notebook();
+            var noteBook = new Notebook();
             Service.Menu();
             Service.Choice(noteBook);
             Console.ReadKey();
@@ -44,10 +43,10 @@ namespace NotebookApp
         internal List<Note> CreateNewNote() //создание новой записи
         {
             Console.Write("Введите фамилию (поле является обязательным): ");
-            string surname = Service.checkNameString(Console.ReadLine(), new char[] {'-'});
+            var surname = Service.CheckNameString(Console.ReadLine(), new[] {'-'});
 
             Console.Write("Введите имя (поле является обязательным): ");
-            string name = Service.checkNameString(Console.ReadLine(), new char[] {'-'});
+            string name = Service.CheckNameString(Console.ReadLine(), new char[] { '-' });
 
             Console.Write("Желаете ввести отчество? (д/н)  ");
             string patronymic = null;
@@ -59,42 +58,36 @@ namespace NotebookApp
                 if (answer.ToLower().Equals("д"))
                 {
                     Console.Write("Введите отчество: ");
-                    patronymic = Service.checkNameString(Console.ReadLine(), new char[] { });
+                    patronymic = Service.CheckNameString(Console.ReadLine(), new char[] { });
                     break;
                 }
 
-                else if (answer.ToLower().Equals("н"))
+                if (answer.ToLower().Equals("н"))
                     break;
 
-                else
-                    Console.Write("\nВведённый Вами символ некорректен!\nПопробуйте ещё раз: ");
+                Console.Write("\nВведённый Вами символ некорректен!\nПопробуйте ещё раз: ");
             }
 
             Console.Write("Введите номер телефона (поле является обязательным): ");
-            string phoneNumber = Console.ReadLine();
+            var phoneNumber = Console.ReadLine();
             long phoneNumberCheck;
 
-            while ((long.TryParse(phoneNumber, out phoneNumberCheck) != true) || (phoneNumber[0] == '-'))
+            while (long.TryParse(phoneNumber, out phoneNumberCheck) != true || phoneNumber[0] == '-')
             {
                 Console.Write("\nВведённый Вами символ некорректен!\nПопробуйте ещё раз: ");
                 phoneNumber = Console.ReadLine();
             }
 
             Console.Write("Введите название страны (поле является обязательным): ");
-            string country = Service.checkNameString(Console.ReadLine(), new char[] {'-', ' '});
+            var country = Service.CheckNameString(Console.ReadLine(), new[] {'-', ' '});
 
             Console.Write("Желаете ввести дату рождения? (д/н)  ");
-            DateTime birthDate = new DateTime();
+            var birthDate = new DateTime();
             string birthDateString;
 
             while (true)
             {
-                string answer = Console.ReadLine();
-                HashSet<int> hs = new HashSet<int>();
-                Console.WriteLine(hs);
-                Console.WriteLine(hs);
-                Console.WriteLine(hs);
-                Console.WriteLine(hs);
+                var answer = Console.ReadLine();
 
                 if (answer.ToLower().Equals("д"))
                 {
@@ -102,8 +95,7 @@ namespace NotebookApp
                     birthDateString = Console.ReadLine();
 
                     while (true)
-                    {
-                        if (birthDateString.Any(c => (!char.IsDigit(c) && (c != '.'))) || birthDateString[2] != '.' ||
+                        if (birthDateString.Any(c => !char.IsDigit(c) && c != '.') || birthDateString[2] != '.' ||
                             birthDateString[5] != '.' || birthDateString.Length != 10)
                         {
                             Console.Write("Введённые Вами данные недопустимы!\nПопробуйте ещё раз: ");
@@ -111,18 +103,18 @@ namespace NotebookApp
                         }
 
                         else
+                        {
                             break;
-                    }
+                        }
 
                     birthDate = DateTime.ParseExact(birthDateString, "dd.MM.yyyy", null);
                     break;
                 }
 
-                else if (answer.ToLower().Equals("н"))
+                if (answer.ToLower().Equals("н"))
                     break;
 
-                else
-                    Console.Write("\nВведённый Вами символ некорректен!\nПопробуйте ещё раз: ");
+                Console.Write("\nВведённый Вами символ некорректен!\nПопробуйте ещё раз: ");
             }
 
             Console.Write("Желаете ввести название организации? (д/н)  ");
@@ -130,7 +122,7 @@ namespace NotebookApp
 
             while (true)
             {
-                string answer = Console.ReadLine();
+                var answer = Console.ReadLine();
 
                 if (answer.ToLower().Equals("д"))
                 {
@@ -139,11 +131,10 @@ namespace NotebookApp
                     break;
                 }
 
-                else if (answer.ToLower().Equals("н"))
+                if (answer.ToLower().Equals("н"))
                     break;
 
-                else
-                    Console.Write("\nВведённый Вами символ некорректен!\nПопробуйте ещё раз: ");
+                Console.Write("\nВведённый Вами символ некорректен!\nПопробуйте ещё раз: ");
             }
 
             Console.Write("Желаете ввести название должности? (д/н)  ");
@@ -151,7 +142,7 @@ namespace NotebookApp
 
             while (true)
             {
-                string answer = Console.ReadLine();
+                var answer = Console.ReadLine();
 
                 if (answer.ToLower().Equals("д"))
                 {
@@ -160,11 +151,10 @@ namespace NotebookApp
                     break;
                 }
 
-                else if (answer.ToLower().Equals("н"))
+                if (answer.ToLower().Equals("н"))
                     break;
 
-                else
-                    Console.Write("\nВведённый Вами символ некорректен!\nПопробуйте ещё раз: ");
+                Console.Write("\nВведённый Вами символ некорректен!\nПопробуйте ещё раз: ");
             }
 
             Console.Write("Желаете внести дополнительные заметки? (д/н)  ");
@@ -172,7 +162,7 @@ namespace NotebookApp
 
             while (true)
             {
-                string answer = Console.ReadLine();
+                var answer = Console.ReadLine();
 
                 if (answer.ToLower().Equals("д"))
                 {
@@ -181,11 +171,10 @@ namespace NotebookApp
                     break;
                 }
 
-                else if (answer.ToLower().Equals("н"))
+                if (answer.ToLower().Equals("н"))
                     break;
 
-                else
-                    Console.Write("\nВведённый Вами символ некорректен!\nПопробуйте ещё раз: ");
+                Console.Write("\nВведённый Вами символ некорректен!\nПопробуйте ещё раз: ");
             }
 
             listOfNotes.Add(new Note(surname, name, patronymic, phoneNumber, country, birthDate, organization, position,
@@ -194,11 +183,11 @@ namespace NotebookApp
             listOfNotes.Add(new Note(surname, name, patronymic, phoneNumber, country, birthDate, organization, position,
                 notes, notesNumber));
 
-            listOfNotes.Add(new Note(surname, name, patronymic, phoneNumber, country, birthDate, organization, position,
+            listOfNotes.Add(new Note(name, surname, patronymic, phoneNumber, country, birthDate, organization, position,
                 notes, notesNumber));
             notesNumber++;
             Console.WriteLine("\nЗапись успешно добавлена!");
-            Service.toMainMenu(this);
+            Service.ToMainMenu(this);
 
             return listOfNotes;
         }
@@ -214,7 +203,7 @@ namespace NotebookApp
 
                 Console.Write(
                     "\nВведите идентификационный номер записи, которую вы желаете просмотреть, или 0, чтобы вернуться в главное меню: ");
-                Note desiredNote = GetNote();
+                var desiredNote = GetNote();
 
                 if (desiredNote == null)
                 {
@@ -229,14 +218,14 @@ namespace NotebookApp
                 {
                     Console.WriteLine(desiredNote);
                     Console.WriteLine("Нажмите любую клавишу, чтобы вернуться в главное меню.");
-                    Service.toMainMenu(this);
+                    Service.ToMainMenu(this);
                 }
             }
 
             else
             {
                 Console.WriteLine("Записи не найдены!\nНажмите любую клавишу, чтобы вернуться в главное меню.");
-                Service.toMainMenu(this);
+                Service.ToMainMenu(this);
             }
         }
 
@@ -245,14 +234,14 @@ namespace NotebookApp
             if (desiredNote != null)
             {
                 Service.EditNoteMenu(desiredNote);
-                Note editedNote = Service.EditNoteChoice(ref desiredNote, this);
+                var editedNote = Service.EditNoteChoice(ref desiredNote, this);
                 listOfNotes[desiredNote.notesNumber - 1] = editedNote;
 
                 while (true)
                 {
                     Console.Write("\nЖелаете продолжить? (д/н) ");
 
-                    string answer = Console.ReadLine();
+                    var answer = Console.ReadLine();
 
                     if (answer.ToLower().Equals("д"))
                     {
@@ -260,16 +249,14 @@ namespace NotebookApp
                         break;
                     }
 
-                    else if (answer.ToLower().Equals("н"))
+                    if (answer.ToLower().Equals("н"))
                         break;
 
-                    else
-                        Console.Write("\nВведённый Вами символ некорректен!\nПопробуйте ещё раз: ");
-
+                    Console.Write("\nВведённый Вами символ некорректен!\nПопробуйте ещё раз: ");
                 }
 
                 Console.WriteLine("\nЗапись успешно изменена!\nНажмите любую клавишу, чтобы вернуться в главное меню.");
-                Service.toMainMenu(this);
+                Service.ToMainMenu(this);
             }
 
             return listOfNotes;
@@ -277,7 +264,6 @@ namespace NotebookApp
 
         internal void DeleteNote() //удаленее записи
         {
-
             Console.WriteLine("***Удаление ранее созданных записей***\n");
 
             if (listOfNotes.Count != 0)
@@ -287,13 +273,13 @@ namespace NotebookApp
 
                 Console.Write(
                     "\nВведите идентификационный номер записи, которую вы желаете удалить, или 0, чтобы вернуться в главное меню: ");
-                Note uselessNote = GetNote();
+                var uselessNote = GetNote();
 
                 if (uselessNote != null)
                 {
                     listOfNotes.Remove(uselessNote);
                     Console.WriteLine("Запись удалена из системы.");
-                    Service.toMainMenu(this);
+                    Service.ToMainMenu(this);
                 }
 
                 else
@@ -309,24 +295,20 @@ namespace NotebookApp
             else
             {
                 Console.WriteLine("Записи не найдены!\nНажмите любую клавишу, чтобы вернуться в главное меню.");
-                Service.toMainMenu(this);
+                Service.ToMainMenu(this);
             }
         }
 
-        public static bool
-            isCorrectChoiceCheck(string choice,
+        public static bool isCorrectChoiceCheck(string choice,
                 out ushort choiceCheck) //проверка того, является ли введенный с клавиатуры символ, числом
         {
-            bool isCorrect = ushort.TryParse(choice, out choiceCheck);
-            Console.WriteLine("hello world!");
+            var isCorrect = ushort.TryParse(choice, out choiceCheck);
             return isCorrect;
         }
 
-        internal List<Note> listOfNotes = new List<Note>();
-
         internal Note GetNote() //получение определённой записи по идентификационному номеру
         {
-            string choice = Console.ReadLine();
+            var choice = Console.ReadLine();
             ushort choiceCheck;
 
             while (isCorrectChoiceCheck(choice, out choiceCheck) == false)
@@ -335,8 +317,8 @@ namespace NotebookApp
                 choice = Console.ReadLine();
             }
 
-            int chosenNumber = Convert.ToInt32(choice);
-            Note desiredNote = listOfNotes.Find(note => note.notesNumber == chosenNumber);
+            var chosenNumber = Convert.ToInt32(choice);
+            var desiredNote = listOfNotes.Find(note => note.notesNumber == chosenNumber);
 
             if (chosenNumber == 0)
             {
@@ -348,6 +330,5 @@ namespace NotebookApp
 
             return desiredNote;
         }
-
     }
 }
